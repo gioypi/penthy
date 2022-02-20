@@ -48,7 +48,7 @@ in_ds = net_manipulation.fill_ds(in_ds, "dataset_files/wav_of_true_flac", target
 
 # Withal for wav files from transcoded music.
 target = 0
-in_ds = net_manipulation.fill_ds(in_ds, "dataset_files/wav_of_transc_flac_128", target)
+in_ds = net_manipulation.fill_ds(in_ds, "dataset_files/wav_of_transc_flac", target)
 print("Features extracted.")
 # print("in_ds: ", in_ds)
 # print("length of in_ds: ", len(in_ds))
