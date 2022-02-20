@@ -3,8 +3,8 @@
 Functions:
     normalize(var, current_lower, current_upper, desired_lower, desired_upper): Normalize a number to fit within the
     desired range.
-    fill_ds(in_ds, dir_path, target): Add samples to a PyBrain dataset, using audio features extracted from all
-    audio files in the specified directory.
+    fill_ds(in_ds, dir_path, target, verbose): Add samples to a PyBrain dataset, using audio features extracted
+    from all audio files in the specified directory.
     shuffle_ds(in_ds): Create a randomly shuffled version of a given SupervisedDataSet.
 """
 
@@ -14,7 +14,7 @@ import random
 from pybrain3.datasets import SupervisedDataSet
 
 
-def normalize(var, current_lower, current_upper, desired_lower=0, desired_upper=1):
+def normalize(var, current_lower, current_upper, desired_lower=0.0, desired_upper=1.0):
     """Normalize a number to fit in a given range.
 
     Parameters:
@@ -87,8 +87,9 @@ def fill_ds(in_ds, dir_path, target, verbose=False):
             while i < len(feat_list):
                 j = 0
                 while j < len(feat_list[i]):
-                    feat_list[i][j] = normalize(feat_list[i][j], 0.0, 0.194) * 10
-                    # feat_list[i][j] = feat_list[i][j] * 100
+                    # Customize the normalization bounds per dataset.
+                    feat_list[i][j] = normalize(feat_list[i][j], 0.0, 0.0194) * 10   # Use for 91 input frequencies.
+                    # feat_list[i][j] = normalize(feat_list[i][j], 0.0, 0.194) * 10  # For older models.
                     j += 1
                 i += 1
             for inp in feat_list:
@@ -96,7 +97,7 @@ def fill_ds(in_ds, dir_path, target, verbose=False):
     if verbose:
         print("length of in_ds: ", in_ds.getLength())
     # print("Whole DS bounds:")
-    # print("min: ", min_f, " max: ", max_f)  # min: 0.0  max: 0.02...
+    # print("min: ", min_f, " max: ", max_f)
     return in_ds
 
 
@@ -119,7 +120,7 @@ def shuffle_ds(in_ds):
         target_list.extend(target)
     merged_list = list(zip(in_list, target_list))
     random.shuffle(merged_list)
-    random.shuffle(merged_list)     # Shuffle twice for better results.
+    random.shuffle(merged_list)     # Shuffle twice for better results. Disable if unnecessary.
     in_list, target_list = zip(*merged_list)
     new_ds = SupervisedDataSet(91, 1)
     i = 0

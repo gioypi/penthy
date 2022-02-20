@@ -1,12 +1,14 @@
 """Open and manipulate audio files to use as a dataset.
 
 Functions:
-    convert_to_wav(file_path): Convert an audio file to wav using ffmpeg.
-    valid_metadata(file_path): Check a file for appropriate sample frequency, bit-depth and audio channels.
+    convert_to_wav(file_path, verbose): Convert an audio file to wav using ffmpeg.
+    valid_metadata(file_path): Check a file for appropriate sample frequency and audio channels.
     extract_features(file_path): Open the audio file of the given path and extract and return its features.
     extract_features_from_dir(dir_path): Open all audio files of the given directory and return their extracted
     features.
     extract_spectogram(file_path): Open the audio file of the given path and extract the value of some frequencies.
+    extract_spect_from_dir(dir_path): Open all audio files of the given directory and return their extracted
+    value of some frequencies.
 """
 
 from pyAudioAnalysis import audioBasicIO as aBIO
@@ -17,13 +19,14 @@ import ffmpeg
 import numpy as np
 
 
-def convert_to_wav(file_path):
+def convert_to_wav(file_path, verbose=False):
     """Create a wav file from a flac file and save it in the same path.
 
     Parameters:
         file_path (string): The path to the file to be converted.
+        verbose (boolean): When True, print the ffmpeg output.
     Returns:
-        new_name (string): The path to the newly created wav file.
+        new_name (string): The path to the newly created wav file. Equals None if no conversion took place.
     """
 
     permitted_extensions = ".flac"
@@ -32,12 +35,17 @@ def convert_to_wav(file_path):
         file_name, old_ext = os.path.splitext(file_path)
         signal = ffmpeg.input(file_path)
         new_name = file_name + ".wav"
-        ffmpeg.output(signal, new_name).run()
+
+        # ffmpeg will print by default, when verbose==False, supress its output.
+        if not verbose:
+            ffmpeg.output(signal, new_name).global_args('-loglevel', 'quiet').run()
+        else:
+            ffmpeg.output(signal, new_name).run()
     return new_name
 
 
 def valid_metadata(file_path):
-    """Run an initial check of an audio file for acceptable sample frequency, bit-depth and number of channels.
+    """Run an initial check on an audio file for acceptable sample frequency and number of channels.
 
     Parameters:
         file_path (string): The path to the file to be checked.
@@ -49,14 +57,9 @@ def valid_metadata(file_path):
                       '" -show_entries stream=sample_rate -select_streams a -of compact=p=0:nk=1 -v 0'
     sample_rate = int(subprocess.check_output(ffprobe_command, universal_newlines=True).strip())
     ffprobe_command = 'ffprobe "' + file_path + \
-                      '" -show_entries stream=bits_per_sample -select_streams a -of compact=p=0:nk=1 -v 0'
-    bits_per_sample = int(subprocess.check_output(ffprobe_command, universal_newlines=True).strip())
-    ffprobe_command = 'ffprobe "' + file_path + \
                       '" -show_entries stream=channels -select_streams a -of compact=p=0:nk=1 -v 0'
     channels = int(subprocess.check_output(ffprobe_command, universal_newlines=True).strip())
     if sample_rate < 44100:
-        return False
-    elif bits_per_sample < 16:
         return False
     elif channels < 2:
         return False
@@ -106,8 +109,8 @@ def extract_features_from_dir(dir_path):
 
 
 def extract_spectogram(file_path):
-    """Compute the spectogram of the given file.
-    TODO: Review doc
+    """Compute the spectogram of the given file. Return part of the frequency range.
+
     Parameters:
         file_path (string): The path to the file to be opened.
     Returns:
@@ -121,6 +124,25 @@ def extract_spectogram(file_path):
     spect_list = spect.tolist()    # spect is an ndarray.
     # print("Shape after cut: ", spect.shape)
     # print(len(spect_list[0]))
-    # print(len(spect_list[10]))
-    # print(len(spect_list[200]))
+    return spect_list
+
+
+def extract_spect_from_dir(dir_path):
+    """Open all audio files in a directory and return their (partial) spectograms.
+
+    Do NOT look recursively into directories, only open files in the current level.
+    Expect a very large list as output. Directories with many files will only work with 64bit Python.
+
+    Parameters:
+        dir_path (string): The path to the directory containing the audio files to be opened.
+    Returns:
+        spect_list (2D float list): All extracted spectograms for all files.
+    """
+
+    permitted_extensions = ".wav"
+    spect_list = list(list())
+    for file_name in os.listdir(dir_path):
+        if file_name.endswith(permitted_extensions):
+            file_path = os.path.join(dir_path, file_name)
+            spect_list.extend(extract_spectogram(file_path))
     return spect_list
