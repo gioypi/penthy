@@ -45,7 +45,7 @@ plus the dependencies of these packages that will come up during installation.
 The license of this repository refers to code written by the author and not the libraries and functions used. For those, look at the respective licenses of the original projects.
 Proper attribution requires mentioning all parties of the following crediting.
 
-Achilleas Papastamatiou developed penthy as his undergraduate thesis in the Department Of Computer Science And Telecommunications in the University of Thessaly in Greece. The project was supervised by professor George Fourlas and supported by professor Vaggelis Spyrou.
+Achilleas Papastamatiou developed penthy as part of his undergraduate thesis in the Department Of Computer Science And Telecommunications in the University of Thessaly in Greece. The project was supervised by professor George Fourlas and supported by professor Vaggelis Spyrou.
 
 ## Auxiliary technologies used while developing
 (Not required to run or fork penthy)
