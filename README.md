@@ -5,41 +5,45 @@ Neural network for classification of flac compression quality.
 ## About penthy
 penthy is an audiophile tool :notes: to check whether a flac file contains truly lossless music, as it is supposed to, or comes from a lossy source, like an mp3 file.
 
-The flac file format compresses music in a way that it remains unaltered, in contrast to lossy compression formats (like mp3) that sacrifice sound quality to limit file size. Confirming that your flac discography is truly lossless is an open-ended problem. One approach to tell the difference is machine learning. Although, penthy cannot evaluate every aspect of digital audio to guarantee that your file is exactly what came out of the studio, she tries to identify transcoding from mp3 sources.
+The flac file format compresses music in a way that it remains unaltered, in contrast to lossy compression formats (like mp3) that sacrifice sound quality to limit file size. Confirming that your flac discography is truly lossless is an open-ended problem. One approach to tell the difference is machine learning. Although, penthy cannot evaluate every aspect of digital audio to guarantee that your file is exactly what came out of the studio, she tries to identify transcoding from mp3 sources. A song that passes penthy's challenge is not necessarily genuine, but it is unlikely to be an mp3 wearing a flac trenchcoat.
 
 _penthy_ is short for _Penthesilea_, a skilled queen of the Amazons who fought in the Trojan War, according to Greek mythology.
 
 ## Working principle
-A **recurrent neural network** with one hidden layer was trained with the highest frequencies of several songs from different genres. The frequencies were divided into 91 time segments and given to the network as inputs. The dataset contained the truly lossless versions of the songs and their fake counterparts – flac files transcoded from mp3 files generated from the originals.
+A **Convolutional Neural Network** was trained with the highest frequencies of several songs from different genres in the form of spectogram images.
+
+The songs are split into small segments to produce the spectograms which are given to the network as inputs. The training dataset contained the truly lossless versions of the songs and their fake counterparts – flac files transcoded from mp3 files generated from the originals. Various mp3 qualities were included. Each spectogram is a 128x128px RGB image depicting only the 16200-22000 Hz frequency range for 8 seconds of audio, saved as a numpy array. The trained model accepts flac or wav tracks as input and outputs a float number from 0 to 1. An output of '0' corresponds to audio transcoded to mp3 and back to a lossless format. An output of '1' classifies the song as not transcoded from an mp3 source, but it could still be transcoded from a different format, subjected to upsampling or altered in other ways.
+
+The current trained model performs generally well, with an approximate accuracy of 90%.
+False negatives (genuine files classified as transcoded) are more common than false positives (transcoded files classified as truly lossless), especially for songs that lack higher frequencies.
 
 ## Used technologies
-- Python 3.7
-- [Pybrain](http://www.pybrain.org/), with the Python 3 wrapper, [Pybrain3](https://github.com/AlexProgramm/pybrain3)
-- [PyAudioAnalysis](https://github.com/tyiannak/pyAudioAnalysis)
+- [Python 3](https://www.python.org/)
+- [TensorFlow 2](https://www.tensorflow.org/) with [Keras](https://keras.io/)
 - [FFmpeg](https://ffmpeg.org/)
 
-## Installation
-You may use this code to evaluate your flac files with the pretrained model or train your own if you have access to truly lossless discography. If you do not plan to train, you can follow the minimum requirements, otherwise you need to follow the complete requirements. The _neural_net.py_ and _retrain.py_ files are not needed for evaluations.
+## Usage
+You may use this code to evaluate your flac files with the pretrained model or train your own if you have access to truly lossless discography.
+- *neural_net.py* trains a new model.
+- *trained.py* evaluates a single file.
+- *trained_dir.py* evaluates all applicable files in a directory (**recommended** if you use penthy to scan your collection).
+- *audio_manipulation.py* is used by all modules to generate the spectograms.
+- No dataset included.
 
-#### Minimum requirements (evaluation only):
-- Python (3.7 64-bit has been tested) (in Windows, make sure to add it to the PATH environment variable)
-- FFmpeg (in Windows, make sure to add it to the PATH environment variable)
+## Installation Requirements
 
-and the following python packages:
-- numpy
-- scipy
-- matplotlib (can be omitted if no error occurs)
-- Pybrain3 (and its [multiple dependencies](http://pybrain.org/docs/quickstart/installation.html))
-- PyAudioAnalysis
+- [Python](https://www.python.org/downloads/) (3.7 64-bit has been tested) (in Windows, make sure to add Python to the PATH environment variable)
+- [FFmpeg](https://ffmpeg.org/download.html) (including ffprobe) (in Windows, make sure to add FFmpeg to the PATH environment variable)
 
-plus the dependencies of these packages that will come up during installation.
-
-#### Complete requirements:
-All the minimum requirements and the following python packages:
+and the following python packages (or see *requirements.txt*, generated by PyCharm):
+- [tensorflow](https://www.tensorflow.org/install) and optionally its demanding [requirements](https://www.tensorflow.org/install/gpu) for GPU support (**recommended**)
+- [keras](https://keras.io/getting_started/)
+- [numpy](https://numpy.org/)
 - [ffmpeg-python](https://github.com/kkroening/ffmpeg-python)
-- [wakepy](https://github.com/np-8/wakepy)
- 
-plus the dependencies of these packages that will come up during installation.
+- [colorama](https://github.com/tartley/colorama)
+- [wakepy](https://github.com/np-8/wakepy) (only if you train new models)
+
+plus the dependencies of these packages that will come up during installation (e.g. pandas, scipy, matplotlib, scikit-learn).
 
 ## Credits and license
 The license of this repository refers to code written by the author and not the libraries and functions used. For those, look at the respective licenses of the original projects.
