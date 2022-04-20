@@ -24,9 +24,9 @@ False negatives (genuine files classified as transcoded) are more common than fa
 
 ## Usage
 You may use this code to evaluate your flac files with the pretrained model or train your own if you have access to truly lossless discography.
-- *neural_net.py* trains a new model.
+- *neural_net.py* builds a dataset with flexible multiprocessing and trains a new model.
 - *trained.py* evaluates a single file.
-- *trained_dir.py* evaluates all applicable files in a directory (**recommended** if you use penthy to scan your collection).
+- *trained_dir.py* evaluates all applicable files in a directory with multiprocessing (**recommended** if you use penthy to scan your collection).
 - *audio_manipulation.py* is used by all modules to generate the spectograms.
 - No dataset included.
 
