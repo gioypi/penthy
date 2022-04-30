@@ -14,6 +14,10 @@ A **Convolutional Neural Network** was trained with the highest frequencies of s
 
 The songs are split into small segments to produce the spectograms which are given to the network as inputs. The training dataset contained the truly lossless versions of the songs and their fake counterparts – flac files transcoded from mp3 files generated from the originals. Various music genres and mp3 qualities were included. Each spectogram is a 128x128 px RGB image depicting only the 16200-22000 Hz frequency range for 8 seconds of audio, saved as a numpy array. The trained model accepts flac or wav tracks as input and outputs a float number from 0 to 1. An output of '0' corresponds to audio transcoded to mp3 and back to a lossless format. An output of '1' classifies the song as not transcoded from an mp3 source, but it could still be transcoded from a different format, subjected to upsampling or altered in other ways.
 
+The CNN is structured as follows:
+![cnn arch white](https://user-images.githubusercontent.com/52460732/166119728-477f7357-be9d-4d65-b316-5c4ce7ab2cd1.png)
+
+
 The current trained model performs generally well, with an approximate accuracy of 90%.
 False negatives (genuine files classified as transcoded) are more common than false positives (transcoded files classified as truly lossless), especially for songs that lack higher frequencies.
 
