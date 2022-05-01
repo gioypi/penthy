@@ -36,7 +36,7 @@ You may use this code to evaluate your flac files with the pretrained model or t
 
 For instance, running *trained_dir.py* for a directory that contains both genuine and transcoded files will output something like this:
 ![output_demo](https://user-images.githubusercontent.com/52460732/166128288-8a5b9744-98de-4ec3-991d-4d93069a96d2.png)  
-You do ***not*** need both versions of a file to get an accurate evaluation, as in this example. Each file is classified seperately.
+You do ***not*** need both versions of a file to get an accurate evaluation, as in this example. Each file is classified separately.
 
 ## Installation Requirements
 
