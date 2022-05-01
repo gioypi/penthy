@@ -34,6 +34,10 @@ You may use this code to evaluate your flac files with the pretrained model or t
 - *audio_manipulation.py* is used by all modules to generate the spectograms.
 - No dataset included.
 
+For instance, running *trained_dir.py* for a directory that contains both genuine and transcoded files will output something like this:
+![output_demo](https://user-images.githubusercontent.com/52460732/166128288-8a5b9744-98de-4ec3-991d-4d93069a96d2.png)  
+You do ***not*** need both versions of a file to get an accurate evaluation, as in this example. Each file is classified seperately.
+
 ## Installation Requirements
 
 - [Python](https://www.python.org/downloads/) (3.7 64-bit has been tested) (in Windows, make sure to add Python to the PATH environment variable)
@@ -51,7 +55,8 @@ plus the dependencies of these packages that will come up during installation (e
 
 ## Credits and license
 The license of this repository refers to code written by the author and not the libraries and functions used. For those, look at the respective licenses of the original projects.
-Proper attribution requires mentioning all parties of the following crediting.
+Music in the example of usage is courtesy of Dean Washburn (nvlachost@gmail.com).
+Proper attribution of penthy requires mentioning all parties of the following crediting.
 
 Achilleas Papastamatiou developed penthy as part of his undergraduate thesis in the Department Of Computer Science And Telecommunications in the University of Thessaly in Greece. The project was supervised by professor George Fourlas and supported by professor Vaggelis Spyrou.
 
