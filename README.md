@@ -60,7 +60,7 @@ The license of this repository refers to code written by the author and not the 
 Music in the example of usage is courtesy of Dean Washburn (nvlachost@gmail.com).
 Proper attribution of penthy requires mentioning all parties of the following crediting.
 
-Achilleas Papastamatiou developed penthy as part of his undergraduate thesis in the Department Of Computer Science And Telecommunications in the University of Thessaly in Greece. The project was supervised by professor George Fourlas and supported by professor Vaggelis Spyrou.
+Achilleas Papastamatiou developed penthy as part of his undergraduate thesis at the Department Of Computer Science And Telecommunications at the University of Thessaly in Greece. The project was supervised by professor George Fourlas and supported by professor Vaggelis Spyrou.
 
 ## Auxiliary technologies used while developing
 (Not required to run or fork penthy)
