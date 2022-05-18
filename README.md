@@ -1,6 +1,6 @@
 ![logo_full](https://user-images.githubusercontent.com/52460732/152804013-f6ff06ca-5968-402d-be61-cce3c2cb7683.png)
 # penthy
-Neural network for classification of flac compression quality.
+Neural network for classification of flac compression quality.  ![up_status](https://monitoshi.lexoyo.me/badge/1652222850566-1003)
 
 ## About penthy
 penthy is an audiophile tool :notes: to check whether a flac file contains truly lossless music, as it is supposed to, or comes from a lossy source, like an mp3 file.
