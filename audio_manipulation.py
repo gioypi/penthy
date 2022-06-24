@@ -3,8 +3,8 @@
 Functions:
     convert_to_wav(file_path, verbose): Convert an audio file to wav using ffmpeg.
     valid_metadata(file_path): Check a file for appropriate extension, sample frequency and audio channels.
-    extract_spectogram(file_path, verbose): Create spectogram images for time segments of an audio file.
-    extract_spectogram_from_dir(dir_path, verbose, multiprocess): Create spectogram images for time segments of
+    extract_spectrogram(file_path, verbose): Create spectrogram images for time segments of an audio file.
+    extract_spectrogram_from_dir(dir_path, verbose, multiprocess): Create spectrogram images for time segments of
     audio files within a directory.
 """
 
@@ -16,10 +16,10 @@ import numpy as np
 from multiprocessing import Pool
 
 
-# Time duration of each spectogram segment in seconds.
+# Time duration of each spectrogram segment in seconds.
 SPECT_DURATION = 8
 
-# Resolution of each spectogram segment in pixels.
+# Resolution of each spectrogram segment in pixels.
 HEIGHT = 128
 WIDTH = HEIGHT
 
@@ -88,14 +88,14 @@ def valid_metadata(file_path):
         return True
 
 
-def extract_spectogram(file_path, verbose=False):
-    """Compute spectograms for overlapping time fragments of an audio file, excluding low frequencies.
+def extract_spectrogram(file_path, verbose=False):
+    """Compute spectrograms for overlapping time fragments of an audio file, excluding low frequencies.
 
     Parameters:
         file_path (string): The path to the file to be opened.
         verbose (boolean): When True, print the ffmpeg output and other information.
     Returns:
-        spect_list (list): List of images of spectogram segments in RGB. Each element is a 3D ndarray.
+        spect_list (list): List of images of spectrogram segments in RGB. Each element is a 3D ndarray.
     """
 
     signal = ffmpeg.input(file_path)
@@ -121,7 +121,7 @@ def extract_spectogram(file_path, verbose=False):
         exit(-1)
     # print("duration:", duration)
 
-    # Support very small files by looping them until they cover one spectogram segment.
+    # Support very small files by looping them until they cover one spectrogram segment.
     if duration < SPECT_DURATION:
         loops = int(SPECT_DURATION / duration)      # aloop will output the audio 1 time more than loops
         signal = ffmpeg.filter(signal, "aloop", loop=loops, size=sample_rate*duration*(loops+1))
@@ -132,7 +132,7 @@ def extract_spectogram(file_path, verbose=False):
         if verbose:
             print("File duration shorter than segment size, audio looped.")
 
-    spect_list = list()         # List of ndarrays, about to contain the spectogram segments.
+    spect_list = list()         # List of ndarrays, about to contain the spectrogram segments.
     sample_start = 0
     sample_end = sample_rate * SPECT_DURATION
     step = int((sample_rate * SPECT_DURATION) / 2)       # 50% overlap
