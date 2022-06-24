@@ -10,9 +10,9 @@ The flac file format compresses music in a way that it remains unaltered, in con
 _penthy_ is short for _Penthesilea_, a skilled queen of the Amazons who fought in the Trojan War, according to Greek mythology.
 
 ## Working principle
-A **Convolutional Neural Network** was trained with the highest frequencies of several songs in the form of spectogram images, in order to recognize flac files that were once mp3s.
+A **Convolutional Neural Network** was trained with the highest frequencies of several songs in the form of spectrogram images, in order to recognize flac files that were once mp3s.
 
-The songs are split into small segments to produce the spectograms which are given to the network as inputs. The training dataset contained the truly lossless versions of the songs and their fake counterparts – flac files transcoded from mp3 files generated from the originals. Various music genres and mp3 qualities were included. Each spectogram is a 128x128 px RGB image depicting only the 16200-22000 Hz frequency range for 8 seconds of audio, saved as a numpy array. The trained model accepts flac or wav tracks as input and outputs a float number from 0 to 1. An output of '0' corresponds to audio transcoded to mp3 and back to a lossless format. An output of '1' classifies the song as not transcoded from an mp3 source, but it could still be transcoded from a different format, subjected to upsampling or altered in other ways.
+The songs are split into small segments to produce the spectrograms which are given to the network as inputs. The training dataset contained the truly lossless versions of the songs and their fake counterparts – flac files transcoded from mp3 files generated from the originals. Various music genres and mp3 qualities were included. Each spectrogram is a 128x128 px RGB image depicting only the 16200-22000 Hz frequency range for 8 seconds of audio, saved as a numpy array. The trained model accepts flac or wav tracks as input and outputs a float number from 0 to 1. An output of '0' corresponds to audio transcoded to mp3 and back to a lossless format. An output of '1' classifies the song as not transcoded from an mp3 source, but it could still be transcoded from a different format, subjected to upsampling or altered in other ways.
 
 The CNN is structured as follows:
 ![cnn arch white](https://user-images.githubusercontent.com/52460732/166119728-477f7357-be9d-4d65-b316-5c4ce7ab2cd1.png)
@@ -31,7 +31,7 @@ You may use this code to evaluate your flac files with the pretrained model or t
 - *neural_net.py* builds a dataset with flexible multiprocessing and trains a new model.
 - *trained.py* evaluates a single file.
 - *trained_dir.py* evaluates all applicable files in a directory with multiprocessing (**recommended** if you use penthy to scan your collection).
-- *audio_manipulation.py* is used by all modules to generate the spectograms.
+- *audio_manipulation.py* is used by all modules to generate the spectrograms.
 - No dataset included.
 
 For instance, running *trained_dir.py* for a directory that contains both genuine and transcoded files will output something like this:
