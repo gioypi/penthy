@@ -161,25 +161,25 @@ def extract_spectrogram(file_path, verbose=False):
         sample_end += step
 
     if verbose:
-        print("Spectogram list extracted from", file_path)
+        print("Spectrogram list extracted from", file_path)
         print("List dimensions: ", len(spect_list), len(spect_list[0]), len(spect_list[0][0]), len(spect_list[0][0][0]))
     return spect_list
 
 
-def extract_spectogram_from_dir(dir_path, verbose=False, multiprocess=True):
-    """Compute spectograms for all appropriate files within a directory, using  extract_spectogram().
+def extract_spectrogram_from_dir(dir_path, verbose=False, multiprocess=True):
+    """Compute spectrograms for all appropriate files within a directory, using extract_spectrogram().
 
     Do NOT look recursively into directories, only open files in the current level.
-    If multiprocessing is enabled, multiple processes will start and the load of spectograms will be split among them.
+    If multiprocessing is enabled, multiple processes will start and the load of spectrograms will be split among them.
     The number of processes will be calculated automatically, based on available CPU cores.
     An 'if __name__ == "__main__"' guard must be used in the module that calls this function with multiprocess enabled.
 
     Parameters:
         dir_path (string): The path to the directory containing the audio files to be opened.
         verbose (boolean): When True, print information about the extracted data.
-        multiprocess (boolean): When True, create multiple processes to extract spectograms faster.
+        multiprocess (boolean): When True, create multiple processes to extract spectrograms faster.
     Returns:
-        spect_list (list): List of RGB images of spectogram segments from all files. Each element is a 3D ndarray.
+        spect_list (list): List of RGB images of spectrogram segments from all files. Each element is a 3D ndarray.
     """
 
     permitted_extensions = ".wav", ".flac"
@@ -197,7 +197,7 @@ def extract_spectogram_from_dir(dir_path, verbose=False, multiprocess=True):
             if file_name.endswith(permitted_extensions):
                 file_path = os.path.join(dir_path, file_name)
                 files.append(file_path)
-        temp_list = pool.imap_unordered(extract_spectogram, files)
+        temp_list = pool.imap_unordered(extract_spectrogram, files)
         pool.close()
         pool.join()
 
@@ -209,9 +209,9 @@ def extract_spectogram_from_dir(dir_path, verbose=False, multiprocess=True):
         for file_name in os.listdir(dir_path):
             if file_name.endswith(permitted_extensions):
                 file_path = os.path.join(dir_path, file_name)
-                spect_list.extend(extract_spectogram(file_path))
+                spect_list.extend(extract_spectrogram(file_path))
 
     if verbose:
-        print("\nSpectogram list extracted from directory", dir_path)
+        print("\nSpectrogram list extracted from directory", dir_path)
         print("List dimensions: ", len(spect_list), len(spect_list[0]), len(spect_list[0][0]), len(spect_list[0][0][0]))
     return spect_list

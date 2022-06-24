@@ -14,10 +14,13 @@ from sys import exit
 
 # The name of the file to evaluate.
 # Good directory structure is important, this is an example with a relative path.
-AUDIO_FILENAME = "dataset_files/testing_wav/example.wav"
+AUDIO_FILENAME = "temp_audio_files/the return - Anger management sessions.wav"
 
 # Path to the file or directory with the saved model to load.
 MODEL_PATH = "saved_models/trained_penthy"
+
+# Evaluation threshold that discriminates the network's output into truly lossless and transcoded audio.
+EVAL_THRESHOLD = 0.6
 
 
 try:
@@ -29,12 +32,12 @@ else:
     print("Network created from file.")
 # net.summary()
 
-print("Extracting spectograms...")
+print("Extracting spectrograms...")
 if not am.valid_metadata(AUDIO_FILENAME):
     print("--Fake flac--")
     exit(0)
-spect_list = am.extract_spectogram(AUDIO_FILENAME)
-print("Spectograms extracted.\n")
+spect_list = am.extract_spectrogram(AUDIO_FILENAME)
+print("Spectrograms extracted.\n")
 
 sum_out = 0
 for i in spect_list:
@@ -42,7 +45,7 @@ for i in spect_list:
 
 avg_out = sum_out / len(spect_list)
 print("Average output of file: ", avg_out)
-if avg_out > 0.6:
+if avg_out > EVAL_THRESHOLD:
     print("--True flac--")
 else:
     print("--Fake flac--")

@@ -27,13 +27,19 @@ class ANSIColors:
     BOLD = '\033[1m'
 
 
-def main():
+def main(arg=None):
+    # Evaluation threshold that discriminates the network's output into truly lossless and transcoded audio.
+    EVAL_THRESHOLD = 0.6
+
     # Path to the file or directory with the saved model to load.
     MODEL_PATH = "saved_models/trained_penthy"
 
     # Path to the directory to scan.
-    # dir_path = argv[1]        # Enable direct assignment or passing an argument.
-    dir_path = "dataset_files/validation_flac"
+    if arg is None:
+        # dir_path = argv[1]        # Enable direct assignment or passing an argument. Supports Unicode.
+        dir_path = "dataset_files/output_demo"
+    else:
+        dir_path = arg
 
     # Any file other than the permitted formats will be ignored.
     permitted_extensions = ".flac", ".wav"
@@ -76,7 +82,7 @@ def main():
             print("(invalid specs)")
             files.remove(track)
 
-    # Extract spectogram segments.
+    # Extract spectrogram segments.
     # If possible, create multiple processes.
     if (os.cpu_count() is not None) and (os.cpu_count() >= 4):
         num_workers = os.cpu_count() - 2
@@ -88,28 +94,37 @@ def main():
         if chunk < 1:
             chunk = 1
         # print("Chunk size: ", chunk)
-        spect_list_list = pool.map(am.extract_spectogram, files, chunksize=chunk)
+        spect_list_list = pool.map(am.extract_spectrogram, files, chunksize=chunk)
         pool.close()
         pool.join()
     else:
         spect_list_list = list()
         for track in files:
-            spect_list_list.append(am.extract_spectogram(track))
+            spect_list_list.append(am.extract_spectrogram(track))
 
-    # Activate the CNN with the spectogram segments and print the result of the evaluation.
+    # Activate the CNN with the spectrogram segments and print the result of the evaluation.
     for i in range(len(files)):
         spect_list = spect_list_list[i]
         sum_out = 0
+        true_votes = 0
+        transc_votes = 0
         for spect in spect_list:
-            sum_out += net(spect.reshape(1, am.HEIGHT, am.WIDTH, 3)).numpy()[0][0]  # net is defined and assigned.
+            net_out = net(spect.reshape(1, am.HEIGHT, am.WIDTH, 3)).numpy()[0][0]  # net is defined and assigned.
+            sum_out += net_out
+            if net_out > EVAL_THRESHOLD:
+                true_votes += 1
+            else:
+                transc_votes += 1
         avg_out = sum_out / len(spect_list)
-        if avg_out > 0.6:
+        if avg_out > EVAL_THRESHOLD:      # Enable either an average of outputs or the voting system.
+        # if true_votes > transc_votes:
             print(os.path.basename(files[i]), "evaluated as", end=' ')
             print(ANSIColors.GREEN + "Truly Lossless" + ANSIColors.END, end=' ')
         else:
             print(os.path.basename(files[i]), "evaluated as", end=' ')
             print(ANSIColors.RED + "Transcoded" + ANSIColors.END, end=' ')
         print("(average CNN's output: {:.2f}%)".format(avg_out * 100))
+        # print("(votes true/transcoded:", true_votes, "/", transc_votes, ")")
 
     end_time = monotonic()      # Real time passed, not time in CPU/GPU.
     print("\nEvaluation complete. Duration: %.3f minutes" % ((end_time - start_time) / 60))

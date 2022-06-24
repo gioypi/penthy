@@ -1,9 +1,9 @@
 """Create a Convolutional Neural Network with Keras and train it to tell truly lossless and transcoded audio apart.
 
-Build a Keras CNN to evaluate audio compression based on spectograms. Use spectogram images extracted with
+Build a Keras CNN to evaluate audio compression based on spectrograms. Use spectrogram images extracted with
 the audio_manipulation module as a dataset. Save the trained Network, but not the dataset.
-A network output of '1' corresponds to a spectogram derived from a truly lossless source.
-An output of '0' corresponds to a spectogram derived from audio transcoded to mp3 and back to a lossless format.
+A network output of '1' corresponds to a spectrogram derived from a truly lossless source.
+An output of '0' corresponds to a spectrogram derived from audio transcoded to mp3 and back to a lossless format.
 Only possible mp3 transcoding is inspected. Even if a file is verified as truly lossless in terms of mp3 transcoding,
 it could still be upsampled, transcoded from a different format or altered in other ways.
 """
@@ -36,22 +36,22 @@ def main():
     print("Tensorflow GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
     wakepy.set_keepawake(keep_screen_awake=False)   # Prevent OS from sleeping during long training sessions.
-    print("Extracting spectograms...")
+    print("Extracting spectrograms...")
     start_time = time.monotonic()
-    spect_true = np.array(am.extract_spectogram_from_dir("dataset_files/true_flac_44-16"))
+    spect_true = np.array(am.extract_spectrogram_from_dir("dataset_files/true_flac_44-16"))
     in_ds = tf.data.Dataset.from_tensor_slices((spect_true, np.array([1] * spect_true.shape[0])))
 
-    # [spect stands for spectogram, trans and transc stand for transcoded]
+    # [spect stands for spectrogram, trans and transc stand for transcoded]
     # For the transcoded samples, use various bitrates and compression qualities.
-    trans_list = am.extract_spectogram_from_dir("dataset_files/flac_44-16_transcoded_from_mp3_320")
-    trans_list.extend(am.extract_spectogram_from_dir("dataset_files/flac_44-16_transcoded_from_mp3_128"))
-    trans_list.extend(am.extract_spectogram_from_dir("dataset_files/flac_44-16_transc_from_mp3_320_prime"))
+    trans_list = am.extract_spectrogram_from_dir("dataset_files/flac_44-16_transcoded_from_mp3_320")
+    trans_list.extend(am.extract_spectrogram_from_dir("dataset_files/flac_44-16_transcoded_from_mp3_128"))
+    trans_list.extend(am.extract_spectrogram_from_dir("dataset_files/flac_44-16_transc_from_mp3_320_prime"))
     spect_trans = np.array(trans_list)
     temp_ds = tf.data.Dataset.from_tensor_slices((spect_trans, np.array([0] * spect_trans.shape[0])))
     in_ds = in_ds.concatenate(temp_ds)
     end_time = time.monotonic()
     # Real time passed, not time in CPU/GPU.
-    print("Spectograms ready. Creation duration: %.4f minutes" % ((end_time - start_time) / 60))
+    print("Spectrograms ready. Creation duration: %.4f minutes" % ((end_time - start_time) / 60))
     # print("Input dataset:", in_ds)
     # print(list(in_ds.as_numpy_iterator()))
 

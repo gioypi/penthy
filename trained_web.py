@@ -35,15 +35,15 @@ else:
     # print("Network created from file.")
     pass
 
-# print("Extracting spectograms...")
+# print("Extracting spectrograms...")
 if not am.valid_metadata(audio_filename):
     print("fakeflac")
     # Delete the file from the server.
     if os.path.exists(audio_filename):
         os.remove(audio_filename)
     exit(0)
-spect_list = am.extract_spectogram(audio_filename)
-# print("Spectograms extracted.\n")
+spect_list = am.extract_spectrogram(audio_filename)
+# print("Spectrograms extracted.\n")
 
 # Delete the file from the server.
 if os.path.exists(audio_filename):
