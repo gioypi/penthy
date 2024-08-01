@@ -27,6 +27,8 @@ False negatives (genuine files classified as transcoded) are more common than fa
 - [FFmpeg](https://ffmpeg.org/)
 
 ## Usage
+>**Update:** This project is not actively maintained. To use penthy, you will need to install old versions of python packages, which can be troublesome and time-consuming.
+
 You may use this code to evaluate your flac files with the pretrained model or train your own if you have access to truly lossless discography.
 - *neural_net.py* builds a dataset with flexible multiprocessing and trains a new model.
 - *trained.py* evaluates a single file.
@@ -41,6 +43,7 @@ You do ***not*** need both versions of a file to get an accurate evaluation, as 
 There is also an [online demo](https://penthy.eu/), to scan your files without downloading or installing anything. Performance is significantly better when run locally, though.
 
 ## Installation Requirements
+>**Update:** This project is not actively maintained. To use penthy, you will need to install old versions of python packages, which can be troublesome and time-consuming.
 
 - [Python](https://www.python.org/downloads/) (3.7 64-bit has been tested) (in Windows, make sure to add Python to the PATH environment variable)
 - [FFmpeg](https://ffmpeg.org/download.html) (including ffprobe) (in Windows, make sure to add FFmpeg to the PATH environment variable)
