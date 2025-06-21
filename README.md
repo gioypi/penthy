@@ -21,6 +21,8 @@ The CNN is structured as follows:
 The current trained model performs generally well, with an approximate accuracy of 90%.
 False negatives (genuine files classified as transcoded) are more common than false positives (transcoded files classified as truly lossless), especially for songs that lack higher frequencies.
 
+However, it has been later discovered that mp3 files with high bitrates (320kbps) may contain enough high frequencies to fool penthy.
+
 ## Used technologies
 - [Python 3](https://www.python.org/)
 - [TensorFlow 2](https://www.tensorflow.org/) with [Keras](https://keras.io/)
