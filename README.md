@@ -1,6 +1,6 @@
 ![logo_full](https://user-images.githubusercontent.com/52460732/152804013-f6ff06ca-5968-402d-be61-cce3c2cb7683.png)
 # penthy
-Neural network for classification of flac compression quality.  ![up_status](https://monitoshi.lexoyo.me/badge/1652222850566-1003)
+Neural network for classification of flac compression quality.
 
 ## About penthy
 penthy is an audiophile tool :notes: to check whether a flac file contains truly lossless music, as it is supposed to, or comes from a lossy source, like an mp3 file.
@@ -42,7 +42,7 @@ For instance, running *trained_dir.py* for a directory that contains both genuin
 ![output_demo](https://user-images.githubusercontent.com/52460732/166128288-8a5b9744-98de-4ec3-991d-4d93069a96d2.png)  
 You do ***not*** need both versions of a file to get an accurate evaluation, as in this example. Each file is classified separately.
 
-There is also an [online demo](https://penthy.eu/), to scan your files without downloading or installing anything. Performance is significantly better when run locally, though.
+~~There is also an *online demo*, to scan your files without downloading or installing anything. Performance is significantly better when run locally, though.~~ [Web app retired October 2026]
 
 ## Installation Requirements
 >**Update:** This project is not actively maintained. To use penthy, you will need to install old versions of python packages, which can be troublesome and time-consuming.
